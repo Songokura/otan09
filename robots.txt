@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://songokura.github.io/otan09/sitemap.xml
+Sitemap: https://avtoshkola-otan09.kz/sitemap.xml
