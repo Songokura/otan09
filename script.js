@@ -46,6 +46,22 @@
     a.setAttribute("href", "https://wa.me/" + WA_NUM + "?text=" + encodeURIComponent(text));
   }, true);
 
+  /* ---------- Конверсии Google Ads и Meta Pixel: звонок, WhatsApp/почта, отправка формы ---------- */
+  var FB_EVENT = { phone: "Contact", contact: "Contact", lead: "Lead" };
+  function conv(key) {
+    if (typeof W.fbq === "function") W.fbq("track", FB_EVENT[key]);
+    var id = (W.OTAN_CONV || {})[key];
+    if (!id || typeof W.gtag !== "function") return;
+    W.gtag("event", "conversion", { send_to: id, value: 1.0, currency: "USD", transport_type: "beacon" });
+  }
+  W.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var h = a.getAttribute("href") || "";
+    if (h.indexOf("tel:") === 0) conv("phone");
+    else if (h.indexOf("wa.me") > -1 || h.indexOf("mailto:") === 0 || h.indexOf("t.me/") > -1) conv("contact");
+  }, true);
+
   /* ---------- fitText для строк заголовка героя ---------- */
   var h1 = doc.getElementById("h1");
   function fitLine(sel, prop) {
@@ -314,6 +330,7 @@
       var lines = ["Заявка с сайта автошколы Отан 09", "Имя: " + name, "Телефон: " + phone, "Город: " + f.city.value, "Тариф: " + f.tarif.value];
       if (f.message.value.trim()) lines.push("Сообщение: " + f.message.value.trim());
       var url = "https://wa.me/" + WA_NUM + "?text=" + encodeURIComponent(lines.join("\n"));
+      conv("lead");
       W.open(url, "_blank", "noopener");
       if (thanks) { thanks.hidden = false; try { thanks.focus({ preventScroll: true }); } catch (err) {} }
       form.reset();
