@@ -23,6 +23,12 @@
     drugie: "Здравствуйте! " + SITE + " Интересует обучение на другую категорию: ",
     praktika: "Здравствуйте! " + SITE + " Хочу узнать расписание занятий. Город: ",
     akciya: "Здравствуйте! " + SITE + " Хотим записаться вдвоём по акции «Приведи друга». Город: ",
+    "akc-abai": "Здравствуйте! " + SITE + " Хочу записаться на обучение по акции в Абае (39 990 тг).",
+    "akc-saran": "Здравствуйте! " + SITE + " Хочу записаться на обучение по акции в Сарани (49 990 тг).",
+    "akc-prishakhtinsk": "Здравствуйте! " + SITE + " Хочу записаться на обучение по акции в Пришахтинске (49 990 тг).",
+    "akc-mojka": "Здравствуйте! " + SITE + " Записываемся с другом по акции «Приведи друга», выбираю подарок: мойка. Город: ",
+    "akc-benzin": "Здравствуйте! " + SITE + " Записываемся с другом по акции «Приведи друга», выбираю подарок: бензин. Город: ",
+    "akc-skidka": "Здравствуйте! " + SITE + " Записываемся с другом по акции «Приведи друга», выбираю скидку 10 000 тг. Город: ",
     kontakty: "Здравствуйте! " + SITE + " Хочу записаться на обучение. Город: ",
     sticky: "Здравствуйте! " + SITE + " Хочу записаться на обучение категории B. Город: ",
     "city-saran": "Здравствуйте! " + SITE + " Интересует ближайшая группа в филиале Сарань.",
@@ -223,6 +229,73 @@
     rv.forEach(function (el) { io.observe(el); });
     setTimeout(function () { rv.forEach(function (el) { if (!el.classList.contains("in") && el.getBoundingClientRect().top < W.innerHeight) el.classList.add("in"); }); }, 1500);
   } else rv.forEach(function (el) { el.classList.add("in"); });
+
+  /* ---------- Салют в разделе акций: запускается при входе в раздел, повторяется после ухода из него ---------- */
+  var akc = doc.getElementById("akciya"), cv = akc ? akc.querySelector(".salut") : null;
+  if (cv && cv.getContext && !REDUCED && "IntersectionObserver" in W) {
+    var cx = cv.getContext("2d"), parts = [], rockets = [], running = false, armed = true, cw = 0, ch = 0, dpr = 1, lastF = 0;
+    var COLS = ["#E8CB7A", "#F5E3A8", "#C9A24D", "#FFFFFF", "#E3262E", "#FF5A4E"];
+    /* холст ростом в экран, ставится на видимую часть раздела */
+    var size = function () {
+      dpr = Math.min(2, W.devicePixelRatio || 1);
+      var top = Math.max(0, -akc.getBoundingClientRect().top);
+      cv.style.transform = "translateY(" + Math.round(top) + "px)";
+      cw = cv.clientWidth; ch = cv.clientHeight;
+      cv.width = Math.round(cw * dpr); cv.height = Math.round(ch * dpr);
+      cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    var burst = function (x, y) {
+      var n = cw < 700 ? 56 : 96, col = COLS[(Math.random() * COLS.length) | 0], col2 = COLS[(Math.random() * COLS.length) | 0];
+      for (var i = 0; i < n; i++) {
+        var a = (i / n) * Math.PI * 2 + Math.random() * 0.2, sp = (cw < 700 ? 2.9 : 4) * (0.5 + Math.random() * 0.65);
+        parts.push({ x: x, y: y, px: x, py: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1, decay: 0.011 + Math.random() * 0.01, c: i % 3 ? col : col2 });
+      }
+    };
+    var launch = function (delay) {
+      setTimeout(function () {
+        var tx = cw * (0.12 + Math.random() * 0.76), ty = ch * (0.16 + Math.random() * 0.3);
+        rockets.push({ x: tx + (Math.random() - 0.5) * 60, y: ch, tx: tx, ty: ty, t: 0 });
+        if (!running) { running = true; lastF = 0; requestAnimationFrame(frame); }
+      }, delay);
+    };
+    var frame = function (ts) {
+      var dt = lastF ? Math.min(2.5, (ts - lastF) / 16.7) : 1; lastF = ts;
+      cx.clearRect(0, 0, cw, ch);
+      cx.lineCap = "round";
+      for (var r = rockets.length - 1; r >= 0; r--) {
+        var k = rockets[r]; k.t += 0.045 * dt;
+        var e = 1 - Math.pow(1 - Math.min(1, k.t), 3), x = k.x + (k.tx - k.x) * e, y = k.y + (k.ty - k.y) * e;
+        cx.strokeStyle = "rgba(245,227,168,.9)"; cx.lineWidth = 2;
+        cx.beginPath(); cx.moveTo(x, y + 14); cx.lineTo(x, y); cx.stroke();
+        if (k.t >= 1) { burst(k.tx, k.ty); rockets.splice(r, 1); }
+      }
+      for (var i = parts.length - 1; i >= 0; i--) {
+        var p = parts[i];
+        p.px = p.x; p.py = p.y;
+        p.vx *= Math.pow(0.975, dt); p.vy = p.vy * Math.pow(0.975, dt) + 0.045 * dt;
+        p.x += p.vx * dt * 1.6; p.y += p.vy * dt * 1.6;
+        p.life -= p.decay * dt;
+        if (p.life <= 0) { parts.splice(i, 1); continue; }
+        cx.globalAlpha = Math.min(1, p.life * 1.4);
+        cx.strokeStyle = p.c; cx.lineWidth = 3 * p.life + 0.8;
+        cx.beginPath(); cx.moveTo(p.px - p.vx * 2.2, p.py - p.vy * 2.2); cx.lineTo(p.x, p.y); cx.stroke();
+      }
+      cx.globalAlpha = 1;
+      if (parts.length || rockets.length) requestAnimationFrame(frame);
+      else { running = false; cx.clearRect(0, 0, cw, ch); }
+    };
+    var show = function () {
+      size();
+      var n = cw < 700 ? 5 : 8;
+      for (var i = 0; i < n; i++) launch(i * 330 + Math.random() * 160);
+    };
+    new IntersectionObserver(function (es) {
+      es.forEach(function (x) {
+        if (x.isIntersecting && armed) { armed = false; show(); }
+        if (!x.isIntersecting) armed = true;
+      });
+    }, { rootMargin: "0px 0px -45% 0px", threshold: 0 }).observe(akc);
+  }
 
   /* ---------- Форма -> WhatsApp ---------- */
   var form = doc.getElementById("form"), thanks = doc.getElementById("thanks"), ferr = doc.getElementById("ferr");
