@@ -122,6 +122,8 @@ body.menu-open{overflow:hidden}
 .plate .txt.on>*,.plate .txt:focus-within>*{opacity:1;transform:none}
 .plate .txt.on>*:nth-child(2){transition-delay:.07s}.plate .txt.on>*:nth-child(3){transition-delay:.14s}.plate .txt.on>*:nth-child(4){transition-delay:.21s}.plate .txt.on>*:nth-child(5){transition-delay:.28s}.plate .txt.on>*:nth-child(6){transition-delay:.35s}
 .t-dark .txt{color:#F4F2EC}
+/* герой виден сразу, без проявления */
+.pl-hero .txt>*{opacity:1;transform:none;transition:none}
 .plate h2{text-wrap:balance;font-size:clamp(38px,min(5.2vw,8svh),74px);margin-top:14px;color:#F4F2EC}
 .plate .lead{margin-top:14px;color:#DDD9D0}
 .plate .cta{margin-top:26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
@@ -189,7 +191,7 @@ html:not(.js) .sig-ph{clip-path:none}
 .route li:nth-child(2) a{animation-delay:.45s}.route li:nth-child(3) a{animation-delay:.9s}.route li:nth-child(4) a{animation-delay:1.35s}.route li:nth-child(5) a{animation-delay:1.8s}
 @keyframes stop{0%,4%{border-color:rgba(232,203,122,.32);background:rgba(11,11,13,.5)}9%,16%{border-color:var(--gold2);background:rgba(201,162,77,.3)}26%,100%{border-color:rgba(232,203,122,.32);background:rgba(11,11,13,.5)}}
 /* наклейка акции */
-.promo{position:absolute;right:0;top:calc(var(--hdr) + 7svh);z-index:4;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 14px;padding:18px 22px 18px 24px;border-radius:14px;background:linear-gradient(120deg,#F0D78C,#C9A24D 55%,#A9853A);color:var(--ink);transform:rotate(-4deg);box-shadow:0 24px 50px -18px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.35);overflow:hidden;transition:transform .35s cubic-bezier(.2,.7,.2,1);opacity:0;animation:promoIn .8s 1.1s cubic-bezier(.2,.7,.2,1) forwards}
+.promo{position:absolute;right:0;top:calc(var(--hdr) + 7svh);z-index:4;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 14px;padding:18px 22px 18px 24px;border-radius:14px;background:linear-gradient(120deg,#F0D78C,#C9A24D 55%,#A9853A);color:var(--ink);transform:rotate(-4deg);box-shadow:0 24px 50px -18px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.35);overflow:hidden;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
 .promo:hover{transform:rotate(0) scale(1.03)}
 .promo::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%);transform:translateX(-130%);animation:shineLoop 5s 2.2s cubic-bezier(.3,.7,.2,1) infinite}
 @keyframes shineLoop{0%{transform:translateX(-130%)}28%,100%{transform:translateX(130%)}}
@@ -200,8 +202,6 @@ html:not(.js) .sig-ph{clip-path:none}
 .promo-s{grid-column:1;font:700 14px/1.2 var(--ft)}
 .promo-arr{grid-column:2;grid-row:1/4;display:block;width:40px;height:40px;padding:10px;border-radius:50%;background:var(--ink);color:var(--gold2);transition:transform .2s}
 .promo:hover .promo-arr{transform:translateX(3px)}
-@keyframes promoInM{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@keyframes promoIn{from{opacity:0;transform:rotate(-12deg) scale(.7)}to{opacity:1;transform:rotate(-4deg)}}
 /* пункт «Акции» в шапке и меню */
 .nav a.nav-akc{display:inline-flex;align-items:center;gap:6px;color:var(--gold2)}
 .nav-akc svg{display:block}
@@ -369,6 +369,42 @@ html:not(.js) .sig-ph{clip-path:none}
 }
 
 /* полоса акции над тарифами */
+/* ---------- автодром: фото слева, два тарифа со светофором ---------- */
+.avd{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(18px,2.4vw,32px);align-items:stretch}
+.avd-ph{position:relative;margin:0;border-radius:var(--rad);overflow:hidden;background:var(--coal);min-height:320px}
+.avd-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:38% 50%}
+.avd-time{position:absolute;left:16px;bottom:16px;display:inline-flex;align-items:center;gap:9px;padding:11px 16px;border-radius:var(--rad);background:rgba(11,11,13,.82);color:#F4F2EC;font-size:15px;font-weight:600}
+.avd-time svg{color:var(--gold2);display:block}
+.avd-time b{color:var(--gold2)}
+.avd-list{display:grid;gap:14px}
+.avd-c{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px 18px;padding:22px 22px 20px;border-radius:var(--rad);background:var(--white);border:1px solid var(--line)}
+.avd-c h3{font:600 clamp(22px,2vw,28px)/1.05 var(--fd);text-transform:uppercase;letter-spacing:.03em}
+.avd-t p{margin-top:5px;font-size:14.5px;color:var(--fg2)}
+.avd-p{display:flex;align-items:baseline;gap:6px;font-family:var(--fd);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.avd-p b{font-size:clamp(40px,3.6vw,54px);line-height:.95}
+.avd-p span{font-size:18px;text-transform:uppercase;letter-spacing:.06em}
+.avd-c .btn{grid-column:1/-1;width:100%;margin-top:12px;padding:0 16px}
+.avd-on{background:var(--ink);border-color:rgba(232,203,122,.55);color:#F4F2EC;box-shadow:0 30px 60px -34px rgba(11,11,13,.7)}
+.avd-on .avd-t p{color:#C9C7C0}
+.avd-on h3{color:#F4F2EC}
+.avd-on .avd-p{color:var(--gold2)}
+/* мини-светофор: у тарифа со светофорами горит, у второго погашен */
+.tl{display:grid;gap:4px;padding:6px 5px;border-radius:9px;background:#16161A}
+.tl i{display:block;width:10px;height:10px;border-radius:50%;background:#3A3A40}
+.avd-on .tl i:nth-child(1){background:#E2483D;animation:tl 4.5s infinite}
+.avd-on .tl i:nth-child(2){background:#F2B632;animation:tl 4.5s 1.5s infinite}
+.avd-on .tl i:nth-child(3){background:#2FC26B;animation:tl 4.5s 3s infinite}
+@keyframes tl{0%,30%{opacity:1;box-shadow:0 0 8px currentColor}34%,100%{opacity:.25;box-shadow:none}}
+@media (max-width:900px){.avd{grid-template-columns:1fr}.avd-ph{min-height:0;aspect-ratio:16/9}}
+@media (max-width:560px){
+  .avd-c{padding:18px 16px 16px;gap:6px 14px}
+  .avd-c h3{font-size:20px}.avd-t p{font-size:13.5px}
+  .avd-p b{font-size:clamp(34px,10vw,42px)}.avd-p span{font-size:15px}
+  .avd-c .btn{white-space:normal;line-height:1.2;font-size:15px}
+  .avd-time{left:10px;bottom:10px;padding:9px 12px;font-size:14px}
+}
+@media (prefers-reduced-motion:reduce){.avd-on .tl i{animation:none}}
+
 .akc-strip{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding:16px 20px;border-radius:var(--rad);background:linear-gradient(100deg,#E3C56F,#C9A24D 55%,#B98F3E);color:var(--ink);font-size:16px;font-weight:600;line-height:1.35;position:relative;overflow:hidden;transition:transform .2s}
 .akc-strip:hover{transform:translateY(-1px)}
 .akc-strip svg{display:block;flex:0 0 auto}
@@ -460,7 +496,7 @@ html:not(.js) .pw{--open:1}
   .plate .cta .btn{width:100%}
   .hero-txt .cta{flex-direction:column;align-items:stretch;gap:10px}
   .hero-txt .cta .btn{width:100%}
-  .promo{position:relative;top:auto;right:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;padding:9px 12px 9px 14px;border-radius:999px;transform:none;margin-bottom:14px;animation:promoInM .6s .9s both}
+  .promo{position:relative;top:auto;right:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;padding:9px 12px 9px 14px;border-radius:999px;transform:none;margin-bottom:14px}
   .promo:hover{transform:none}
   .promo-k{font-size:11px;letter-spacing:.12em}
   .promo-p{font-size:20px;margin:0}

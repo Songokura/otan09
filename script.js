@@ -36,14 +36,16 @@
     "city-abai": "Здравствуйте! " + SITE + " Интересует ближайшая группа в филиале Абай.",
     "city-shakhtinsk": "Здравствуйте! " + SITE + " Интересует ближайшая группа в филиале Шахтинск.",
     "city-prishakhtinsk": "Здравствуйте! " + SITE + " Интересует ближайшая группа в филиале Пришахтинск.",
-    "city-sortirovka": "Здравствуйте! " + SITE + " Интересует ближайшая группа в филиале Сортировка."
+    "city-sortirovka": "Здравствуйте! " + SITE + " Интересует ближайшая группа в филиале Сортировка.",
+    "avd-svet": "Здравствуйте! " + SITE + " Хочу записаться на вождение на автодроме со светофорами (16 000 тг, 45 минут).",
+    "avd-bez": "Здравствуйте! " + SITE + " Хочу записаться на вождение на автодроме без светофоров (13 000 тг, 45 минут)."
   };
   W.addEventListener("click", function (e) {
     var a = e.target && e.target.closest ? e.target.closest("a[data-wa]") : null;
     if (!a) return;
     var key = a.getAttribute("data-wa") || "default";
     var text = WA[key] || WA["default"];
-    a.setAttribute("href", "https://wa.me/" + WA_NUM + "?text=" + encodeURIComponent(text));
+    a.setAttribute("href", "https://wa.me/" + (a.getAttribute("data-wa-num") || WA_NUM) + "?text=" + encodeURIComponent(text));
   }, true);
 
   /* ---------- Конверсии Google Ads и Meta Pixel: звонок, WhatsApp/почта, отправка формы ---------- */
@@ -130,7 +132,8 @@
   var pws = [].slice.call(doc.querySelectorAll(".pw"));
   var sticky = doc.getElementById("sticky"), kont = doc.getElementById("kontakty");
   var hdr = doc.getElementById("hdr");
-  var INTRO = (location.hash.length > 1 || W.pageYOffset > 80 || REDUCED) ? 1 : 0;
+  /* герой открыт сразу: интро-шторка ждала загрузки всей страницы, на телефоне это 2-3 секунды чёрного экрана */
+  var INTRO = 1;
   var introStart = 0, ticking = false;
 
   /* чтение размеров пакетом, потом запись; open догоняет цель плавно (lerp), чтобы фронт не дёргался при скролле пальцем */
