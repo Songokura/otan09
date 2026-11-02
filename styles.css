@@ -238,7 +238,8 @@ html:not(.js) .sig-ph{clip-path:none}
 .chips li{padding:9px 14px;border:1px solid rgba(244,242,236,.28);border-radius:var(--rad);font-size:14.5px;font-weight:600;color:#F4F2EC}
 
 /* ---------- тарифы ---------- */
-.tarifs{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
+.tarifs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+@media (max-width:1100px){.tarifs{grid-template-columns:1fr 1fr}.tarifs .tarif-top-pick{grid-column:1/-1}}
 .tarif{position:relative;overflow:hidden;background:var(--white);border:1px solid var(--line);border-radius:var(--rad);padding:clamp(24px,3vw,38px);display:flex;flex-direction:column;gap:18px;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s}
 .tarif:hover{transform:translateY(-4px);box-shadow:0 30px 50px -28px rgba(22,22,26,.35)}
 /* проход поворотника по карточке при наведении */
@@ -355,11 +356,16 @@ html:not(.js) .sig-ph{clip-path:none}
 .sk-face::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 22px,rgba(11,11,13,.06) 22px 23px)}
 .sk-k,.sk-t{position:relative;font:700 13px/1 var(--ft);letter-spacing:.16em;text-transform:uppercase}
 .sk-v{position:relative;font:600 clamp(64px,6.4vw,96px)/1 var(--fd);letter-spacing:.01em;font-variant-numeric:tabular-nums}
+.akc-city.akc-one{grid-template-columns:minmax(0,1fr)}
+.ac-wide{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(220px,300px);align-items:center;gap:10px 40px;padding:36px 36px 32px}
+.ac-wide .ac-price{margin:0}.ac-wide .btn{margin:0}.ac-wide .ac-note{margin-top:10px;max-width:none}
+@media (max-width:900px){.ac-wide{grid-template-columns:minmax(0,1fr) auto}.ac-wide .btn{grid-column:1/-1}}
 @media (max-width:900px){.akc-city,.gifts{grid-template-columns:1fr 1fr}.ac-top,.gift-sk{grid-column:1/-1}}
 @media (max-width:620px){
   .akc-city,.gifts{grid-template-columns:1fr;gap:12px}
   .ac{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:end;gap:6px 12px;padding:18px 18px 16px}
   .ac h4{font-size:22px;grid-column:1/-1}
+  .ac-wide .ac-l{grid-column:1/-1}.ac-wide .ac-note{margin-top:6px}
   .ac-price{grid-column:1;margin:0}.ac-price b{font-size:clamp(40px,12vw,50px)}.ac-price span{font-size:17px}
   .ac-note{grid-column:2;font-size:13.5px;line-height:1.3;padding-bottom:4px}
   .ac .btn{grid-column:1/-1;margin-top:10px;white-space:normal;text-align:center;line-height:1.2;font-size:15px}
